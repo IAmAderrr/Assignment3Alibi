@@ -120,15 +120,15 @@ Duplicate detection is handled safely by inspecting SQL error messages rather th
 ## How to Compile and Run
 
 ### Compile (from project root)
-
+```bash
 dir /s /b src*.java > sources.txt
 javac -d src\out @sources.txt
-
+```
 
 ### Run
-
+```bash
 java -cp "src\out;lib\sqlite-jdbc-3.51.1.0.jar" Main
-
+```
 
 ---
 
@@ -143,3 +143,4 @@ java -cp "src\out;lib\sqlite-jdbc-3.51.1.0.jar" Main
 ## Conclusion
 
 This project demonstrates use of Java OOP, JDBC, and SQLite, with clean architecture and proper exception handling.
+
