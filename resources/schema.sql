@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE IF NOT EXISTS instructors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE
@@ -12,9 +14,7 @@ CREATE TABLE IF NOT EXISTS courses (
     video_hours INTEGER,
     live_sessions INTEGER,
     FOREIGN KEY (instructor_id) REFERENCES instructors(id)
-    );
-
-
+);
 
 CREATE TABLE IF NOT EXISTS enrollments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,3 +23,4 @@ CREATE TABLE IF NOT EXISTS enrollments (
     UNIQUE(student_id, course_id),
     FOREIGN KEY (course_id) REFERENCES courses(id)
 );
+
