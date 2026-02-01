@@ -13,7 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseRepository {
+public class CourseRepository implements repository.interfaces.CourseRepositoryI {
 
     public void create(Course course) {
         String sql = """
@@ -34,7 +34,7 @@ public class CourseRepository {
                 ps.setInt(4, course.getInstructor().getId());
             }
 
-            // subclass-specific columns
+
             if (course instanceof VideoCourse vc) {
                 ps.setInt(5, vc.getVideoHours());
                 ps.setNull(6, Types.INTEGER);
@@ -86,7 +86,7 @@ public class CourseRepository {
         return courses;
     }
 
-    public Course getById(int id) {
+    public Course getById(Integer id) {
         String sql = """
             SELECT c.id, c.name, c.price, c.type, c.instructor_id,
                    c.video_hours, c.live_sessions,
@@ -114,7 +114,7 @@ public class CourseRepository {
         throw new ResourceNotFoundException("Course not found");
     }
 
-    public void update(int id, Course course) {
+    public void update(Integer id, Course course) {
         String sql = """
             UPDATE courses
             SET name = ?, price = ?, type = ?, instructor_id = ?, video_hours = ?, live_sessions = ?
@@ -156,7 +156,7 @@ public class CourseRepository {
         }
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         String sql = "DELETE FROM courses WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -188,7 +188,7 @@ public class CourseRepository {
         }
 
         if ("VIDEO".equalsIgnoreCase(type)) {
-            int hours = rs.getInt("video_hours"); // 0 if NULL in SQLite; OK for demo
+            int hours = rs.getInt("video_hours");
             return new VideoCourse(courseId, name, price, instructor, hours);
         }
 
