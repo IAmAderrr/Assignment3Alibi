@@ -4,7 +4,7 @@ import exception.InvalidInputException;
 import interfaces.Payable;
 import interfaces.Validatable;
 
-public class Enrollment implements Validatable, Payable {
+public class Enrollment implements Validatable<Enrollment>, Payable {
     private int id;
     private int studentId;
     private Course course;
@@ -17,21 +17,25 @@ public class Enrollment implements Validatable, Payable {
         this.id = id;
         this.studentId = studentId;
         this.course = course;
-        validate();
+        validated(this); 
     }
 
     public int getId() { return id; }
     public int getStudentId() { return studentId; }
     public Course getCourse() { return course; }
 
+    public void setStudentId(int studentId) { this.studentId = studentId; }
+    public void setCourse(Course course) { this.course = course; }
+
     @Override
-    public void validate() {
-        if (studentId <= 0) throw new InvalidInputException("Invalid student ID");
-        if (course == null) throw new InvalidInputException("Course cannot be null");
+    public void validate(Enrollment e) {
+        if (e.studentId <= 0) throw new InvalidInputException("Invalid student ID");
+        if (e.course == null) throw new InvalidInputException("Course cannot be null");
+        if (e.course.getId() <= 0) throw new InvalidInputException("Course must be persisted before enrollment");
     }
 
     @Override
-    public double getPayableAmount() {
+    public double calculateFinalPrice() {
         return course.calculateFinalPrice();
     }
 }
