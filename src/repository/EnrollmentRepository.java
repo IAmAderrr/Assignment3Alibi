@@ -13,7 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnrollmentRepository {
+public class EnrollmentRepository implements repository.interfaces.EnrollmentRepositoryI {
 
     public void create(Enrollment enrollment) {
         String sql = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
@@ -63,7 +63,7 @@ public class EnrollmentRepository {
         return enrollments;
     }
 
-    public Enrollment getById(int id) {
+    public Enrollment getById(Integer id) {
         String sql = """
             SELECT e.id, e.student_id,
                    c.id AS course_id, c.name, c.price, c.type,
@@ -96,7 +96,7 @@ public class EnrollmentRepository {
         throw new ResourceNotFoundException("Enrollment not found");
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         String sql = "DELETE FROM enrollments WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -109,6 +109,43 @@ public class EnrollmentRepository {
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Failed to delete enrollment", e);
+        }
+    }
+
+
+    public void update(Integer id, Enrollment enrollment) {
+        String sql = "UPDATE enrollments SET student_id = ?, course_id = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, enrollment.getStudentId());
+            ps.setInt(2, enrollment.getCourse().getId());
+            ps.setInt(3, id);
+
+            if (ps.executeUpdate() == 0)
+                throw new ResourceNotFoundException("Enrollment not found");
+
+        } catch (SQLException e) {
+            String msg = (e.getMessage() == null) ? "" : e.getMessage().toLowerCase();
+            if (msg.contains("unique") || msg.contains("constraint")) {
+                throw new DuplicateResourceException("Student already enrolled in this course");
+            }
+            throw new DatabaseOperationException("Failed to update enrollment", e);
+        }
+    }
+
+    @Override
+    public boolean existsByCourseId(int courseId) {
+        String sql = "SELECT 1 FROM enrollments WHERE course_id = ? LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Failed to check enrollments for course", e);
         }
     }
 
