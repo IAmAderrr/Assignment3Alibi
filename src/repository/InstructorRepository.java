@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstructorRepository {
+public class InstructorRepository implements repository.interfaces.InstructorRepositoryI {
 
     public void create(Instructor instructor) {
         String sql = "INSERT INTO instructors (name) VALUES (?)";
@@ -50,7 +50,7 @@ public class InstructorRepository {
         return instructors;
     }
 
-    public Instructor getById(int id) {
+    public Instructor getById(Integer id) {
         String sql = "SELECT * FROM instructors WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -73,7 +73,7 @@ public class InstructorRepository {
         throw new ResourceNotFoundException("Instructor not found");
     }
 
-    public void update(int id, Instructor instructor) {
+    public void update(Integer id, Instructor instructor) {
         String sql = "UPDATE instructors SET name = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -91,7 +91,7 @@ public class InstructorRepository {
         }
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         String sql = "DELETE FROM instructors WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
