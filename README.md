@@ -1,9 +1,9 @@
-# Assignment 3 — Course Management System (JDBC + SQLite)
+# Assignment 4 — SOLID Architecture & Advanced OOP 
 
 ## Overview
 
 This project is a Java Course Management System developed using JDBC and SQLite.  
-It demonstrates object-oriented principles, database interaction, exception handling, and repository-based design.
+It demonstrates advanced object-oriented principles, SOLID principles, database interaction, exception handling, and repository-based design.
 
 The system supports different course types (`VideoCourse`, `LiveCourse`), instructors, and student enrollments, with persistent storage handled via SQLite.
 
@@ -11,36 +11,48 @@ The system supports different course types (`VideoCourse`, `LiveCourse`), instru
 
 ## Project Structure
 ```bash
-Assignment3/
+Assignment4/
 ├── src/
-│ ├── model/
-│ │ ├── Course.java
-│ │ ├── VideoCourse.java
-│ │ ├── LiveCourse.java
-│ │ ├── Instructor.java
-│ │ └── Enrollment.java
-│ ├── repository/
-│ │ ├── CourseRepository.java
-│ │ ├── InstructorRepository.java
-│ │ └── EnrollmentRepository.java
-│ ├── exception/
-│ │ ├── DatabaseOperationException.java
-│ │ ├── DuplicateResourceException.java
-│ │ ├── InvalidInputException.java
-│ │ └── ResourceNotFoundException.java
-│ ├── interfaces/
-│ │ ├── Validatable.java
-│ │ └── Payable.java
-│ ├── utils/
-│ │ ├── DatabaseConnection.java
-│ │ └── SchemaRunner.java
-│ └── Main.java
+│   ├── model/
+│   │   ├── Course.java
+│   │   ├── VideoCourse.java
+│   │   ├── LiveCourse.java
+│   │   ├── Instructor.java
+│   │   └── Enrollment.java
+│   ├── interfaces/
+│   │   ├── Payable.java
+│   │   └── Validatable.java
+│   ├── repository/
+│   │   ├── CourseRepository.java
+│   │   ├── InstructorRepository.java
+│   │   ├── EnrollmentRepository.java
+│   │   └── interfaces/
+│   │       ├── CourseRepositoryInterface.java
+│   │       ├── InstructorRepositoryInterface.java
+│   │       └── EnrollmentRepositoryInterface.java
+│   ├── service/
+│   │   ├── CourseService.java
+│   │   ├── InstructorService.java
+│   │   ├── EnrollmentService.java
+│   │   └── interfaces/
+│   │       ├── CourseServiceInterface.java
+│   │       ├── InstructorServiceInterface.java
+│   │       └── EnrollmentServiceInterface.java
+│   ├── exception/
+│   │   ├── DatabaseOperationException.java
+│   │   ├── DuplicateResourceException.java
+│   │   ├── InvalidInputException.java
+│   │   └── ResourceNotFoundException.java
+│   ├── utils/
+│   │   ├── DatabaseConnection.java
+│   │   └── SchemaRunner.java
+│   └── Main.java
 ├── resources/
-│ └── schema.sql
+│   └── schema.sql
 ├── lib/
-│ └── sqlite-jdbc-3.51.1.0.jar
+│   └── sqlite-jdbc-3.51.1.0.jar
 ├── docs/
-│ └── uml.png
+│   └── uml.png
 └── README.md
 ```
 ---
@@ -90,14 +102,28 @@ The schema is executed automatically when the application is run using the `Sche
 
 ### Interfaces
 
-- `Validatable` → input validation
-- `Payable` → payment calculation
+- `Validatable` → enforces domain-level input validation
+- `Payable` → defines payment and pricing behavior
 
 ### Composition
 
 - A `Course` may have an associated `Instructor`
 - An `Enrollment` links a student to a course
 
+---
+## SOLID Principles
+
+- Single Responsibility Principle
+  Each class has one clearly defined responsibility
+- Open/Closed Principle
+  New course types can be added without modifying existing logic
+- Liskov Substitution Principle
+  VideoCourse and LiveCourse can be used anywhere Course is expected
+- Interface Segregation Principle
+  Small, focused interfaces (Validatable, Payable)
+- Dependency Inversion Principle
+  Business logic depends on abstractions, not concrete implementations
+  
 ---
 
 ## Exception Handling
@@ -142,5 +168,6 @@ java -cp "src\out;lib\sqlite-jdbc-3.51.1.0.jar" Main
 
 ## Conclusion
 
-This project demonstrates use of Java OOP, JDBC, and SQLite, with clean architecture and proper exception handling.
+This project demonstrates clean SOLID-compliant architecture, effective JDBC + SQLite integration, and robust exception handling, providing a maintainable and extensible foundation for a real-world course management system.
+
 
