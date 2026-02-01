@@ -1,0 +1,6 @@
+package repository.interfaces;
+
+import model.Instructor;
+
+public interface InstructorRepositoryI extends CrudRepository<Instructor, Integer> {
+}
